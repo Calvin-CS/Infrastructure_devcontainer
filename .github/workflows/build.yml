@@ -48,7 +48,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: latest
+          tags: ${{ steps.meta.outputs.tags }}
+          #tags: calvincsinfrastructure/devcontainer:latest
           labels: ${{ steps.meta.outputs.labels }}
           
       - name: Generate artifact attestation
