@@ -72,7 +72,7 @@ ENV TZ=${TZ}
 ## Calvin CS course requirements
 ##################################
 # CS10X
-COPY --chmod=0755 CS10X-packages.sh /scripts/CS10X-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS10X-packages.sh /scripts/CS10X-packages.sh
 RUN /scripts/CS10X-packages.sh
 
 # Cleanup misc files

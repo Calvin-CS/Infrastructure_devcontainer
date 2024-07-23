@@ -72,23 +72,23 @@ ENV TZ=${TZ}
 ## Calvin CS course requirements
 ##################################
 # CS10X
-COPY --chmod=0755 cs10x/CS10X-packages.sh /scripts/CS10X-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS10X-packages.sh /scripts/CS10X-packages.sh
 RUN /scripts/CS10X-packages.sh
 
 # CS112
-COPY --chmod=0755 cs112/CS112-packages.sh /scripts/CS112-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS112-packages.sh /scripts/CS112-packages.sh
 RUN /scripts/CS112-packages.sh
 
 # CS212
-COPY --chmod=0755 cs212/CS212-packages.sh /scripts/CS212-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS212-packages.sh /scripts/CS212-packages.sh
 RUN /scripts/CS212-packages.sh
 
 # CS214
-COPY --chmod=0755 cs214/CS214-packages.sh /scripts/CS214-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS214-packages.sh /scripts/CS214-packages.sh
 RUN /scripts/CS214-packages.sh
 
 # CS262
-COPY --chmod=0755 cs262/CS262-packages.sh /scripts/CS262-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS262-packages.sh /scripts/CS262-packages.sh
 RUN /scripts/CS262-packages.sh
 
 # Cleanup misc files

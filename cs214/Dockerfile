@@ -72,7 +72,7 @@ ENV TZ=${TZ}
 ## Calvin CS course requirements
 ##################################
 # CS214
-COPY --chmod=0755 CS214-packages.sh /scripts/CS214-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS214-packages.sh /scripts/CS214-packages.sh
 RUN /scripts/CS214-packages.sh
 
 # Cleanup misc files
