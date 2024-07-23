@@ -10,8 +10,8 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /u
 
 # NodeJS 
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get update -y && \
-    apt-get install -y nodejs && \
+    apt update -y && \
+    apt install -y nodejs && \
     /usr/bin/npm install -g npm && \
     /usr/bin/npm install -g express-generator && \
     /usr/bin/npm install -g express && \
@@ -31,3 +31,8 @@ apt update -y && \
     postgresql-client \
     postgresql-client-common \
     && rm -rf /var/lib/apt/lists/*
+
+# Azure CLI
+curl -fsSL https://aka.ms/InstallAzureCLIDeb | bash - && \
+    apt update -y && \
+    rm -rf /var/lib/apt/lists/*

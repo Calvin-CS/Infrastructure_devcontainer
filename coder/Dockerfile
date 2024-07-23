@@ -22,6 +22,7 @@ RUN apt update -y && \
     gnupg \
     gpg \
     locales \
+    lsb-release \
     nano \
     software-properties-common \
     tar \
