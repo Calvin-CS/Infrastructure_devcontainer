@@ -24,3 +24,10 @@ curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     /usr/bin/npm install -g typescript && \
     /usr/bin/npm install -g @angular/cli && \
     rm -rf /var/lib/apt/lists/*
+
+# PostgreSQL client
+apt update -y && \
+    DEBIAN_FRONTEND=noninteractive apt install -y \
+    postgresql-client \
+    postgresql-client-common \
+    && rm -rf /var/lib/apt/lists/*
