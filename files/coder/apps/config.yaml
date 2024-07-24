@@ -4,7 +4,7 @@ apps:
     scheme: http
     port: 6081
     # Working directory
-    working-directory: /home/coder
+    working-directory: /home/${local.username}
     # File path to icon used in application launcher
     icon-path: /coder/apps/desktop.png
     # VNC server will be started by default in this image
