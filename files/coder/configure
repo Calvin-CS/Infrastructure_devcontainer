@@ -1,9 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "Creating desktop..."
-mkdir -p "$XFCE_DEST_DIR"
-cp -rT "$XFCE_BASE_DIR" "$XFCE_DEST_DIR"
+if ! test -d $XFCE_DEST_DIR; then
+    echo "Copying XFCE desktop defaults..."
+    mkdir -p "$XFCE_DEST_DIR"
+    cp -rT "$XFCE_BASE_DIR" "$XFCE_DEST_DIR"
+fi
 
 echo "Initializing Supervisor..."
 nohup supervisord
