@@ -1,0 +1,3 @@
+[submodule "codervnc/workspaces-core-images"]
+	path = codervnc/workspaces-core-images
+	url = https://github.com/kasmtech/workspaces-core-images.git
