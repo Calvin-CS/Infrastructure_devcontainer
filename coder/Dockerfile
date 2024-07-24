@@ -77,19 +77,19 @@ ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devc
 RUN /scripts/CS10X-packages.sh
 
 # CS112
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts//CS112-packages.sh /scripts/CS112-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS112-packages.sh /scripts/CS112-packages.sh
 RUN /scripts/CS112-packages.sh
 
 # CS212
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts//CS212-packages.sh /scripts/CS212-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS212-packages.sh /scripts/CS212-packages.sh
 RUN /scripts/CS212-packages.sh
 
 # CS214
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts//CS214-packages.sh /scripts/CS214-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS214-packages.sh /scripts/CS214-packages.sh
 RUN /scripts/CS214-packages.sh
 
 # CS262
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts//CS262-packages.sh /scripts/CS262-packages.sh
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS262-packages.sh /scripts/CS262-packages.sh
 RUN /scripts/CS262-packages.sh
 
 # Add Software not in the devcontainer
