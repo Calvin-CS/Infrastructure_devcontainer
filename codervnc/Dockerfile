@@ -233,3 +233,5 @@ ENV TZ=${TZ}
 USER ${USER}
 WORKDIR /home/${USER}
 ENTRYPOINT [ "/usr/bin/bash", "-l" ]
+
+EXPOSE $NO_VNC_PORT
