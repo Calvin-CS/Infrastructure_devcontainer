@@ -63,11 +63,11 @@ RUN mkdir -p /scripts
 
 # Locale and Environment configuration
 RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV TERM xterm-256color
-ENV TZ=${TZ}
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8 \
+    TERM=xterm-256color \
+    TZ=${TZ}
 
 ##################################
 ## Calvin CS course requirements
