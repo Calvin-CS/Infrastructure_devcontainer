@@ -121,14 +121,14 @@ RUN bash $INST_SCRIPTS/xfce/install_xfce_ui.sh && rm -rf $INST_SCRIPTS/xfce/
 ADD ./workspaces-core-images/src/$DISTRO/xfce/.config/ $HOME/.config/
 RUN mkdir -p /usr/share/extra/backgrounds/
 RUN mkdir -p /usr/share/extra/icons/
-ADD /workspaces-core-images/src/common/resources/images/bg_kasm.png  /usr/share/backgrounds/bg_kasm.png
-ADD /workspaces-core-images/src/common/resources/images/$BG_IMG  /usr/share/backgrounds/bg_default.png
-ADD /workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_ubuntu.png
-ADD /workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_default.png
-ADD /workspaces-core-images/src/common/resources/images/icon_kasm.png /usr/share/extra/icons/icon_kasm.png
-ADD /workspaces-core-images/src/common/resources/images/egress_info.svg /usr/share/extra/icons/egress_info.svg
-ADD /workspaces-core-images/src/common/resources/images/egress_error.svg /usr/share/extra/icons/egress_error.svg
-ADD /workspaces-core-images/src/common/resources/images/egress_offline.svg /usr/share/extra/icons/egress_offline.svg
+ADD ./workspaces-core-images/src/common/resources/images/bg_kasm.png  /usr/share/backgrounds/bg_kasm.png
+ADD ./workspaces-core-images/src/common/resources/images/$BG_IMG  /usr/share/backgrounds/bg_default.png
+ADD ./workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_ubuntu.png
+ADD ./workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_default.png
+ADD ./workspaces-core-images/src/common/resources/images/icon_kasm.png /usr/share/extra/icons/icon_kasm.png
+ADD ./workspaces-core-images/src/common/resources/images/egress_info.svg /usr/share/extra/icons/egress_info.svg
+ADD ./workspaces-core-images/src/common/resources/images/egress_error.svg /usr/share/extra/icons/egress_error.svg
+ADD ./workspaces-core-images/src/common/resources/images/egress_offline.svg /usr/share/extra/icons/egress_offline.svg
 
 ### Install kasm_vnc dependencies and binaries
 COPY ./workspaces-core-images/src/ubuntu/install/kasm_vnc $INST_SCRIPTS/kasm_vnc/
