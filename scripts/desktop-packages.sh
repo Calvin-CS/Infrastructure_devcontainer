@@ -61,3 +61,9 @@ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoftprod.gpg] https://p
 apt update -y
 DEBIAN_FRONTEND=noninteractive apt install -y code seahorse
 rm -rf /var/lib/apt/lists/*
+
+# Desktop icon
+mkdir -p /usr/share/icons/hicolor/apps
+wget -O /usr/share/icons/hicolor/apps/vscode.svg https://kasm-static-content.s3.amazonaws.com/icons/vscode.svg
+sed -i '/Icon=/c\Icon=/usr/share/icons/hicolor/apps/vscode.svg' /usr/share/applications/code.desktop
+sed -i 's#/usr/share/code/code#/usr/share/code/code --no-sandbox##' /usr/share/applications/code.desktop
