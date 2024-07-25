@@ -315,14 +315,14 @@ RUN apt update -y && \
     rm -rf /var/lib/apt/lists/*
 
 # add unburden config files
-ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/bashprofile-unburden /etc/profile.d/unburden.sh
 ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/unburden-home-dir.conf /etc/unburden-home-dir
 ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/unburden-home-dir.list /etc/unburden-home-dir.list
 ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/unburden-home-dir /etc/default/unburden-home-dir
-RUN chmod 0755 /etc/profile.d/unburden.sh && \
-    chmod 0644 /etc/unburden-home-dir && \
+RUN chmod 0644 /etc/unburden-home-dir && \
     chmod 0644 /etc/unburden-home-dir.list && \
-    chmod 0644 /etc/default/unburden-home-dir
+    chmod 0644 /etc/default/unburden-home-dir \
+    # Add a few more directories that are needed
+    echo "m d .config/xfce4 xfce4-config\n" >> /etc/unburden-home-dir.list
 
 # Cleanup misc files
 RUN rm -f /var/log/*.log && \
