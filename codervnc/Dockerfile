@@ -1,33 +1,57 @@
-#### Build Stage ####
-ARG BASE_IMAGE="ubuntu:noble"
-FROM $BASE_IMAGE AS base_layer
+FROM ubuntu:noble
 
+### Labels
 LABEL maintainer="Chris Wieringa <cwieri39@calvin.edu>"
+LABEL "org.opencontainers.image.authors"='Chris Wieringa cwieri39@calvin.edu"'
+LABEL "com.kasmweb.image"="true"
+LABEL "com.kasmweb.gpu_acceleration_egl"="nvidia"
 
 # Set versions and platforms
 ARG BUILDDATE=20240725-1
-ARG TZ=America/Detroit
 ARG USER=ubuntu
+ARG TZ='America/Detroit'
 
 # KasmVNC
 ARG BG_IMG=bg_kasm.png
 ARG EXTRA_SH=noop.sh
-ARG DISTRO=ubuntu
-ARG LANG='en_US.UTF-8'
-ARG LANGUAGE='en_US:en'
-ARG LC_ALL='en_US.UTF-8'
+ARG START_PULSEAUDIO=1
+ARG START_XFCE4=1
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    DISTRO=$DISTRO \
+ENV AUDIO_PORT=4901 \
+    DEBIAN_FRONTEND=noninteractive \
+    DISPLAY=:1 \
+    DISTRO=ubuntu \
+    GOMP_SPINCOUNT=0 \
     HOME=/home/kasm-default-profile \
     INST_SCRIPTS=/dockerstartup/install \
+    KASMVNC_AUTO_RECOVER=true \
     KASM_VNC_PATH=/usr/share/kasmvnc \
-    LANG=$LANG \
-    LANGUAGE=$LANGUAGE \
-    LC_ALL=$LC_ALL \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8 \
     TZ=$TZ \
+    LD_LIBRARY_PATH=/opt/libjpeg-turbo/lib64/:/usr/local/lib/ \
+    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}:/usr/local/nvidia/lib:/usr/local/nvidia/lib64 \
+    MAX_FRAME_RATE=24 \
+    NO_VNC_PORT=6901 \
+    NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics,compat32,utility \
+    OMP_WAIT_POLICY=PASSIVE \
+    PULSE_RUNTIME_PATH=/var/run/pulse \
+    SDL_GAMECONTROLLERCONFIG="030000005e040000be02000014010000,XInput Controller,platform:Linux,a:b0,b:b1,x:b2,y:b3,back:b8,guide:b16,start:b9,leftstick:b10,rightstick:b11,leftshoulder:b4,rightshoulder:b5,dpup:b12,dpdown:b13,dpleft:b14,dpright:b15,leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:b6,righttrigger:b7" \
+    SHELL=/bin/bash \
+    START_PULSEAUDIO=$START_PULSEAUDIO \
+    STARTUPDIR=/dockerstartup \
+    START_XFCE4=$START_XFCE4 \
     TERM=xterm-256color \
-    STARTUPDIR=/dockerstartup
+    TZ=$TZ \
+    VNC_COL_DEPTH=24 \
+    VNCOPTIONS="-PreferBandwidth -DynamicQualityMin=4 -DynamicQualityMax=7 -DLP_ClipDelay=0" \
+    VNC_PORT=5901 \
+    VNC_PORT=5901 \
+    VNC_PW=vncpassword \
+    VNC_RESOLUTION=1280x1024 \
+    VNC_RESOLUTION=1280x720 \
+    VNC_VIEW_ONLY_PW=vncviewonlypassword
 
 # Do all run commands with bash
 SHELL ["/bin/bash", "-c"] 
@@ -272,6 +296,19 @@ ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devc
 RUN /scripts/desktop-packages.sh
 
 ##################################
+## KasmVNC Coder changes
+##################################
+
+# https://github.com/bpmct/coder-templates/blob/main/better-vnc/ modifications
+COPY kasmvnc.yaml /etc/kasmvnc/kasmvnc.yaml
+COPY vnc_startup.sh /dockerstartup/vnc_startup.sh
+RUN cp -r /home/kasm-user /tmp/kasm-user
+RUN apt-get update && apt-get install sudo
+RUN echo "kasm-user ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers.d/nopasswd
+RUN DEBIAN_FRONTEND=noninteractive make-ssl-cert generate-default-snakeoil --force-overwrite
+RUN adduser kasm-user ssl-cert
+
+##################################
 ## Final Container settings
 ##################################
 
@@ -283,78 +320,12 @@ RUN rm -f /var/log/*.log && \
 # Locale and Environment configuration
 RUN locale-gen ${LANG}
 
-USER ${USER}
-WORKDIR /home/${USER}
-ENTRYPOINT [ "/usr/bin/bash", "-l" ]
-
-
-#### Runtime Stage ####
-FROM scratch
-COPY --from=base_layer / /
-
-### Labels
-LABEL "org.opencontainers.image.authors"='Chris Wieringa cwieri39@calvin.edu"'
-LABEL "com.kasmweb.image"="true"
-LABEL "com.kasmweb.gpu_acceleration_egl"="nvidia"
-
-### Environment config
-ARG DISTRO=ubuntu
-ARG EXTRA_SH=noop.sh
-ARG LANG='en_US.UTF-8'
-ARG LANGUAGE='en_US:en'
-ARG LC_ALL='en_US.UTF-8'
-ARG START_PULSEAUDIO=1
-ARG START_XFCE4=1
-ARG TZ='America/Detroit'
-ENV AUDIO_PORT=4901 \
-    DEBIAN_FRONTEND=noninteractive \
-    DISPLAY=:1 \
-    DISTRO=$DISTRO \
-    GOMP_SPINCOUNT=0 \
-    HOME=/home/kasm-user \
-    INST_SCRIPTS=/dockerstartup/install \
-    KASMVNC_AUTO_RECOVER=true \
-    KASM_VNC_PATH=/usr/share/kasmvnc \
-    LANG=$LANG \
-    LANGUAGE=$LANGUAGE \
-    LC_ALL=$LC_ALL \
-    LD_LIBRARY_PATH=/opt/libjpeg-turbo/lib64/:/usr/local/lib/ \
-    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}:/usr/local/nvidia/lib:/usr/local/nvidia/lib64 \
-    MAX_FRAME_RATE=24 \
-    NO_VNC_PORT=6901 \
-    NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics,compat32,utility \
-    OMP_WAIT_POLICY=PASSIVE \
-    PULSE_RUNTIME_PATH=/var/run/pulse \
-    SDL_GAMECONTROLLERCONFIG="030000005e040000be02000014010000,XInput Controller,platform:Linux,a:b0,b:b1,x:b2,y:b3,back:b8,guide:b16,start:b9,leftstick:b10,rightstick:b11,leftshoulder:b4,rightshoulder:b5,dpup:b12,dpdown:b13,dpleft:b14,dpright:b15,leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:b6,righttrigger:b7" \
-    SHELL=/bin/bash \
-    START_PULSEAUDIO=$START_PULSEAUDIO \
-    STARTUPDIR=/dockerstartup \
-    START_XFCE4=$START_XFCE4 \
-    TERM=xterm \
-    VNC_COL_DEPTH=24 \
-    VNCOPTIONS="-PreferBandwidth -DynamicQualityMin=4 -DynamicQualityMax=7 -DLP_ClipDelay=0" \
-    VNC_PORT=5901 \
-    VNC_PORT=5901 \
-    VNC_PW=vncpassword \
-    VNC_RESOLUTION=1280x1024 \
-    VNC_RESOLUTION=1280x720 \
-    VNC_VIEW_ONLY_PW=vncviewonlypassword \
-    TZ=$TZ
-
-# https://github.com/bpmct/coder-templates/blob/main/better-vnc/ modifications
-ENTRYPOINT [ "/usr/bin/bash", "-l" ]
-COPY kasmvnc.yaml /etc/kasmvnc/kasmvnc.yaml
-COPY vnc_startup.sh /dockerstartup/vnc_startup.sh
-RUN cp -r /home/kasm-user /tmp/kasm-user
-RUN apt-get update && apt-get install sudo
-RUN echo "kasm-user ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers.d/nopasswd
-RUN DEBIAN_FRONTEND=noninteractive make-ssl-cert generate-default-snakeoil --force-overwrite
-RUN adduser kasm-user ssl-cert
-
-### Ports and user
+# Ports and user
 EXPOSE $VNC_PORT \
        $NO_VNC_PORT \
        $UPLOAD_PORT \
        $AUDIO_PORT
-WORKDIR $HOME
-USER 1000
+
+USER ${USER}
+WORKDIR /home/${USER}
+ENTRYPOINT [ "/usr/bin/bash", "-l" ]
