@@ -244,7 +244,7 @@ RUN touch $STARTUPDIR/wm.log \
     && rm -Rf /home/kasm-default-profile/.launchpadlib
 
 ### Cleanup job
-COPY ./workspaces-core-images/src/ubuntu/install/cleanup $INST_SCRIPTS/cleanup/
+ADD --chmod=0755 https://raw.githubusercontent.com/kasmtech/workspaces-core-images/5cd776818c52351191dbd51ba8cb3a6451993db4/src/ubuntu/install/cleanup/cleanup.sh $INST_SCRIPTS/cleanup/
 RUN bash $INST_SCRIPTS/cleanup/cleanup.sh && rm -rf $INST_SCRIPTS/cleanup/
 
 ##################################
