@@ -5,7 +5,7 @@ FROM $BASE_IMAGE AS base_layer
 LABEL maintainer="Chris Wieringa <cwieri39@calvin.edu>"
 
 # Set versions and platforms
-ARG BUILDDATE=20240724-2
+ARG BUILDDATE=20240725-1
 ARG TZ=America/Detroit
 ARG USER=ubuntu
 
@@ -16,9 +16,6 @@ ARG DISTRO=ubuntu
 ARG LANG='en_US.UTF-8'
 ARG LANGUAGE='en_US:en'
 ARG LC_ALL='en_US.UTF-8'
-
-ARG VIRTUALGL_VERSION=3.1.1
-ARG VNC_ROOT_DIR=/opt/vnc
 
 ENV DEBIAN_FRONTEND=noninteractive \
     DISTRO=$DISTRO \
@@ -98,22 +95,22 @@ RUN mkdir -p $HOME/Desktop
 ### Support NVIDIA gpus for graphics acceleration
 RUN echo "/usr/local/nvidia/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
     echo "/usr/local/nvidia/lib64" >> /etc/ld.so.conf.d/nvidia.conf
-COPY workspaces-core-images/src/ubuntu/install/nvidia/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
+COPY codervnc/workspaces-core-images/src/ubuntu/install/nvidia/10_nvidia.json /usr/share/glvnd/egl_vendor.d/10_nvidia.json
 
 ### Setup package rules
-COPY workspaces-core-images/src/ubuntu/install/package_rules $INST_SCRIPTS/package_rules/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/package_rules $INST_SCRIPTS/package_rules/
 RUN bash $INST_SCRIPTS/package_rules/package_rules.sh && rm -rf $INST_SCRIPTS/package_rules/
 
 ### Install common tools
-COPY workspaces-core-images/src/ubuntu/install/tools $INST_SCRIPTS/tools/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/tools $INST_SCRIPTS/tools/
 RUN bash $INST_SCRIPTS/tools/install_tools.sh && rm -rf $INST_SCRIPTS/tools/
 
 ### Copy over the maximization script to our startup dir for use by app images.
-COPY workspaces-core-images/src/ubuntu/install/maximize_script $STARTUPDIR/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/maximize_script $STARTUPDIR/
 
 ### Install custom fonts
 # NOTE: I don't need every font/language -- just stick with english and specified noto packages
-# COPY workspaces-core-images/src/ubuntu/install/fonts $INST_SCRIPTS/fonts/
+# COPY codervnc/workspaces-core-images/src/ubuntu/install/fonts $INST_SCRIPTS/fonts/
 # RUN bash $INST_SCRIPTS/fonts/install_custom_fonts.sh && rm -rf $INST_SCRIPTS/fonts/
 RUN apt update -y && \
     apt install -y fonts-noto-core \
@@ -122,83 +119,83 @@ RUN apt update -y && \
     language-pack-en
 
 ### Install xfce UI
-COPY workspaces-core-images/src/ubuntu/install/xfce $INST_SCRIPTS/xfce/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/xfce $INST_SCRIPTS/xfce/
 RUN bash $INST_SCRIPTS/xfce/install_xfce_ui.sh && rm -rf $INST_SCRIPTS/xfce/
-ADD workspaces-core-images/src/$DISTRO/xfce/.config/ $HOME/.config/
+ADD codervnc/workspaces-core-images/src/$DISTRO/xfce/.config/ $HOME/.config/
 RUN mkdir -p /usr/share/extra/backgrounds/
 RUN mkdir -p /usr/share/extra/icons/
-ADD workspaces-core-images/src/common/resources/images/bg_kasm.png  /usr/share/backgrounds/bg_kasm.png
-ADD workspaces-core-images/src/common/resources/images/$BG_IMG  /usr/share/backgrounds/bg_default.png
-ADD workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_ubuntu.png
-ADD workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_default.png
-ADD workspaces-core-images/src/common/resources/images/icon_kasm.png /usr/share/extra/icons/icon_kasm.png
-ADD workspaces-core-images/src/common/resources/images/egress_info.svg /usr/share/extra/icons/egress_info.svg
-ADD workspaces-core-images/src/common/resources/images/egress_error.svg /usr/share/extra/icons/egress_error.svg
-ADD workspaces-core-images/src/common/resources/images/egress_offline.svg /usr/share/extra/icons/egress_offline.svg
+ADD codervnc/workspaces-core-images/src/common/resources/images/bg_kasm.png  /usr/share/backgrounds/bg_kasm.png
+ADD codervnc/workspaces-core-images/src/common/resources/images/$BG_IMG  /usr/share/backgrounds/bg_default.png
+ADD codervnc/workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_ubuntu.png
+ADD codervnc/workspaces-core-images/src/common/resources/images/icon_ubuntu.png /usr/share/extra/icons/icon_default.png
+ADD codervnc/workspaces-core-images/src/common/resources/images/icon_kasm.png /usr/share/extra/icons/icon_kasm.png
+ADD codervnc/workspaces-core-images/src/common/resources/images/egress_info.svg /usr/share/extra/icons/egress_info.svg
+ADD codervnc/workspaces-core-images/src/common/resources/images/egress_error.svg /usr/share/extra/icons/egress_error.svg
+ADD codervnc/workspaces-core-images/src/common/resources/images/egress_offline.svg /usr/share/extra/icons/egress_offline.svg
 
 ### Install kasm_vnc dependencies and binaries
-COPY workspaces-core-images/src/ubuntu/install/kasm_vnc $INST_SCRIPTS/kasm_vnc/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/kasm_vnc $INST_SCRIPTS/kasm_vnc/
 RUN bash $INST_SCRIPTS/kasm_vnc/install_kasm_vnc.sh && rm -rf $INST_SCRIPTS/kasm_vnc/
-COPY workspaces-core-images/src/common/install/kasm_vnc/kasmvnc.yaml /etc/kasmvnc/
+COPY codervnc/workspaces-core-images/src/common/install/kasm_vnc/kasmvnc.yaml /etc/kasmvnc/
 
 ### Install Kasm Profile Sync
-COPY workspaces-core-images/src/ubuntu/install/profile_sync $INST_SCRIPTS/profile_sync/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/profile_sync $INST_SCRIPTS/profile_sync/
 RUN bash $INST_SCRIPTS/profile_sync/install_profile_sync.sh
 
 ### Install Kasm Upload Server
-COPY workspaces-core-images/src/ubuntu/install/kasm_upload_server $INST_SCRIPTS/kasm_upload_server/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/kasm_upload_server $INST_SCRIPTS/kasm_upload_server/
 RUN bash $INST_SCRIPTS/kasm_upload_server/install_kasm_upload_server.sh  && rm -rf $INST_SCRIPTS/kasm_upload_server/
 
 ### Install Audio
-COPY workspaces-core-images/src/ubuntu/install/audio $INST_SCRIPTS/audio/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/audio $INST_SCRIPTS/audio/
 RUN bash $INST_SCRIPTS/audio/install_audio.sh  && rm -rf $INST_SCRIPTS/audio/
 
 ### Install Audio Input
-COPY workspaces-core-images/src/ubuntu/install/audio_input $INST_SCRIPTS/audio_input/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/audio_input $INST_SCRIPTS/audio_input/
 RUN bash $INST_SCRIPTS/audio_input/install_audio_input.sh && rm -rf $INST_SCRIPTS/audio_input/
 
 ### Install Gamepad Service
-COPY workspaces-core-images/src/ubuntu/install/gamepad $INST_SCRIPTS/gamepad/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/gamepad $INST_SCRIPTS/gamepad/
 RUN bash $INST_SCRIPTS/gamepad/install_gamepad.sh && rm -rf $INST_SCRIPTS/gamepad/
 
 ### Install Webcam Service
-COPY workspaces-core-images/src/ubuntu/install/webcam $INST_SCRIPTS/webcam/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/webcam $INST_SCRIPTS/webcam/
 RUN bash $INST_SCRIPTS/webcam/install_webcam.sh && rm -rf $INST_SCRIPTS/webcam/
 
 ### Install Printer Service
-COPY workspaces-core-images/src/ubuntu/install/printer $INST_SCRIPTS/printer/
-COPY workspaces-core-images/src/ubuntu/install/printer/start_cups.sh /etc/cups/start_cups.sh
+COPY codervnc/workspaces-core-images/src/ubuntu/install/printer $INST_SCRIPTS/printer/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/printer/start_cups.sh /etc/cups/start_cups.sh
 RUN bash $INST_SCRIPTS/printer/install_printer.sh && rm -rf $INST_SCRIPTS/printer
-COPY workspaces-core-images/src/ubuntu/install/printer/resources/*.ppd /etc/cups/ppd/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/printer/resources/*.ppd /etc/cups/ppd/
 
 ### Install Recorder Service
-COPY workspaces-core-images/src/ubuntu/install/recorder $INST_SCRIPTS/recorder/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/recorder $INST_SCRIPTS/recorder/
 RUN bash $INST_SCRIPTS/recorder/install_recorder.sh && rm -rf $INST_SCRIPTS/recorder
 
 ### Install custom cursors
-COPY workspaces-core-images/src/ubuntu/install/cursors $INST_SCRIPTS/cursors/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/cursors $INST_SCRIPTS/cursors/
 RUN bash $INST_SCRIPTS/cursors/install_cursors.sh && rm -rf $INST_SCRIPTS/cursors/
 
 ### configure startup
-COPY workspaces-core-images/src/common/scripts/kasm_hook_scripts $STARTUPDIR
-ADD workspaces-core-images/src/common/startup_scripts $STARTUPDIR
+COPY codervnc/workspaces-core-images/src/common/scripts/kasm_hook_scripts $STARTUPDIR
+ADD codervnc/workspaces-core-images/src/common/startup_scripts $STARTUPDIR
 RUN bash $STARTUPDIR/set_user_permission.sh $STARTUPDIR $HOME && \
     echo 'source $STARTUPDIR/generate_container_user' >> $HOME/.bashrc
 
 ### extra configurations needed per distro variant
-COPY workspaces-core-images/src/ubuntu/install/extra $INST_SCRIPTS/extra/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/extra $INST_SCRIPTS/extra/
 RUN bash $INST_SCRIPTS/extra/$EXTRA_SH  && rm -rf $INST_SCRIPTS/extra/
 
 ### VirtualGL
-COPY workspaces-core-images/src/ubuntu/install/virtualgl $INST_SCRIPTS/virtualgl/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/virtualgl $INST_SCRIPTS/virtualgl/
 RUN bash $INST_SCRIPTS/virtualgl/install_virtualgl.sh && rm -rf $INST_SCRIPTS/virtualgl/
 
 ### Sysbox support
-COPY workspaces-core-images/src/ubuntu/install/sysbox $INST_SCRIPTS/sysbox/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/sysbox $INST_SCRIPTS/sysbox/
 RUN bash $INST_SCRIPTS/sysbox/install_systemd.sh && rm -rf $INST_SCRIPTS/sysbox/
 
 ### Custom Folder Emblems
-COPY workspaces-core-images/src/ubuntu/install/emblems $INST_SCRIPTS/emblems/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/emblems $INST_SCRIPTS/emblems/
 RUN bash $INST_SCRIPTS/emblems/install_emblems.sh && rm -rf $INST_SCRIPTS/emblems/
 
 ### Create user and home directory for base images that don't already define it
@@ -244,7 +241,7 @@ RUN touch $STARTUPDIR/wm.log \
     && rm -Rf /home/kasm-default-profile/.launchpadlib
 
 ### Cleanup job
-COPY workspaces-core-images/src/ubuntu/install/cleanup $INST_SCRIPTS/cleanup/
+COPY codervnc/workspaces-core-images/src/ubuntu/install/cleanup $INST_SCRIPTS/cleanup/
 RUN bash $INST_SCRIPTS/cleanup/cleanup.sh && rm -rf $INST_SCRIPTS/cleanup/
 
 ##################################
