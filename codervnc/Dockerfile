@@ -112,8 +112,14 @@ RUN bash $INST_SCRIPTS/tools/install_tools.sh && rm -rf $INST_SCRIPTS/tools/
 COPY ./workspaces-core-images/src/ubuntu/install/maximize_script $STARTUPDIR/
 
 ### Install custom fonts
-COPY ./workspaces-core-images/src/ubuntu/install/fonts $INST_SCRIPTS/fonts/
-RUN bash $INST_SCRIPTS/fonts/install_custom_fonts.sh && rm -rf $INST_SCRIPTS/fonts/
+# NOTE: I don't need every font/language -- just stick with english and specified noto packages
+# COPY ./workspaces-core-images/src/ubuntu/install/fonts $INST_SCRIPTS/fonts/
+# RUN bash $INST_SCRIPTS/fonts/install_custom_fonts.sh && rm -rf $INST_SCRIPTS/fonts/
+RUN apt update -y && \
+    apt install -y fonts-noto-core \
+    fonts-noto-cjk \
+    fonts-noto-color-emoji \
+    language-pack-en
 
 ### Install xfce UI
 COPY ./workspaces-core-images/src/ubuntu/install/xfce $INST_SCRIPTS/xfce/
