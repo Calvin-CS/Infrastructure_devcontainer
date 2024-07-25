@@ -300,7 +300,7 @@ RUN /scripts/desktop-packages.sh
 ##################################
 
 # https://github.com/bpmct/coder-templates/blob/main/better-vnc/ modifications
-COPY kasmvnc.yaml /etc/kasmvnc/kasmvnc.yaml
+COPY --chmod=0644 kasmvnc.yaml /etc/kasmvnc/kasmvnc.yaml
 COPY --chmod=0755 vnc_startup.sh /dockerstartup/vnc_startup.sh
 RUN cp -r /home/kasm-user /tmp/kasm-user
 
