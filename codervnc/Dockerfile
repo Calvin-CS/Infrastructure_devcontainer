@@ -301,16 +301,28 @@ RUN /scripts/desktop-packages.sh
 
 # https://github.com/bpmct/coder-templates/blob/main/better-vnc/ modifications
 COPY kasmvnc.yaml /etc/kasmvnc/kasmvnc.yaml
-COPY vnc_startup.sh /dockerstartup/vnc_startup.sh
+COPY --chmod=0755 vnc_startup.sh /dockerstartup/vnc_startup.sh
 RUN cp -r /home/kasm-user /tmp/kasm-user
-RUN apt-get update && apt-get install sudo
-RUN echo "kasm-user ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers.d/nopasswd
-RUN DEBIAN_FRONTEND=noninteractive make-ssl-cert generate-default-snakeoil --force-overwrite
-RUN adduser kasm-user ssl-cert
 
 ##################################
 ## Final Container settings
 ##################################
+
+# add unburden
+RUN apt update -y && \
+    apt install -y \
+    unburden-home-dir && \
+    rm -rf /var/lib/apt/lists/*
+
+# add unburden config files
+ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/bashprofile-unburden /etc/profile.d/unburden.sh
+ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/unburden-home-dir.conf /etc/unburden-home-dir
+ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/unburden-home-dir.list /etc/unburden-home-dir.list
+ADD https://raw.githubusercontent.com/Calvin-CS/Infrastructure_configs/main/auth/unburden-home-dir /etc/default/unburden-home-dir
+RUN chmod 0755 /etc/profile.d/unburden.sh && \
+    chmod 0644 /etc/unburden-home-dir && \
+    chmod 0644 /etc/unburden-home-dir.list && \
+    chmod 0644 /etc/default/unburden-home-dir
 
 # Cleanup misc files
 RUN rm -f /var/log/*.log && \
