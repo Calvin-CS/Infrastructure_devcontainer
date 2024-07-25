@@ -20,7 +20,7 @@ DEBIAN_FRONTEND=noninteractive apt install -y google-chrome-stable
 rm -rf /var/lib/apt/lists/*
 
 # deal with chrome password store
-sed -i 's+exec -a+exec -a "$0" "$HERE/chrome" "--password-store=basic" "$@"+g' /usr/bin/google-chrome-stable
+#sed -i 's+exec -a+exec -a "$0" "$HERE/chrome" "--password-store=basic" "$@"+g' /usr/bin/google-chrome-stable
 
 #### VS Code
 curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoftprod.gpg
