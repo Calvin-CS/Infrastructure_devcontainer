@@ -92,6 +92,10 @@ RUN /scripts/CS214-packages.sh
 ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS262-packages.sh /scripts/CS262-packages.sh
 RUN /scripts/CS262-packages.sh
 
+# CS300
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS300-packages.sh /scripts/CS300-packages.sh
+RUN /scripts/CS300-packages.sh
+
 # Cleanup misc files
 RUN rm -f /var/log/*.log && \
     rm -f /var/log/apt/* && \

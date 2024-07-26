@@ -2,7 +2,7 @@ FROM ubuntu:noble
 LABEL maintainer="Chris Wieringa <cwieri39@calvin.edu>"
 
 # Set versions and platforms
-ARG BUILDDATE=20240724-1
+ARG BUILDDATE=20240726-1
 ARG TZ=America/Detroit
 
 # Do all run commands with bash
@@ -41,10 +41,6 @@ RUN echo "deb [signed-by=/usr/share/keyrings/csrepo.gpg] http://cpscadmin.cs.cal
     mv /tmp/csrepo.asc.gpg /usr/share/keyrings/csrepo.gpg && \
     rm -f /tmp/csrepo.asc
 
-# microsoft vs code cli - only cli install
-# RUN curl -fsSL https://code.visualstudio.com/sha/download?build=stable\&os=cli-alpine-x64 | tar zxfv - -C/usr/local/bin && \
-#    chmod 0775 /usr/local/bin/code
-
 ##################################
 ## Container configuration
 ##################################
@@ -72,34 +68,9 @@ ENV LANG=en_US.UTF-8 \
 ##################################
 ## Calvin CS course requirements
 ##################################
-# CS10X
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS10X-packages.sh /scripts/CS10X-packages.sh
-RUN /scripts/CS10X-packages.sh
-
-# CS112
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS112-packages.sh /scripts/CS112-packages.sh
-RUN /scripts/CS112-packages.sh
-
-# CS212
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS212-packages.sh /scripts/CS212-packages.sh
-RUN /scripts/CS212-packages.sh
-
-# CS214
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS214-packages.sh /scripts/CS214-packages.sh
-RUN /scripts/CS214-packages.sh
-
 # CS262
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS262-packages.sh /scripts/CS262-packages.sh
-RUN /scripts/CS262-packages.sh
-
-# Add Software not in the devcontainer
-# VS Code Server - install latest code-server
-# JupyerLab
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/usr/local/code-server && \
-    apt update -y && \
-	DEBIAN_FRONTEND=noninteractive apt install -y python3-pip && \
-	rm -rf /var/lib/apt/lists/* && \
-	pip3 install jupyterlab --break-system-packages
+ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS300-packages.sh /scripts/CS300-packages.sh
+RUN /scripts/CS300-packages.sh
 
 # Cleanup misc files
 RUN rm -f /var/log/*.log && \

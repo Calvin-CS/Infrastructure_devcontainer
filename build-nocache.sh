@@ -9,5 +9,4 @@ docker build --no-cache -t devcontainer-cs112:latest cs112/.
 docker build --no-cache -t devcontainer-cs212:latest cs212/.
 docker build --no-cache -t devcontainer-cs214:latest cs214/.
 docker build --no-cache -t devcontainer-cs262:latest cs262/.
-docker build --no-cache -t devcontainer-coder:latest codervnc/.
-docker build --no-cache -t devcontainer-codervnc:latest codervnc/.
+docker build --no-cache -t devcontainer-cs262:latest cs300/.

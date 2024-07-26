@@ -254,9 +254,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  # Coder
-  build_push_image_coder:
-    name: Push Docker image to Docker Hub coder
+  # CS262
+  build_push_image_cs300:
+    name: Push Docker image to Docker Hub CS300
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -265,7 +265,7 @@ jobs:
       id-token: write
     env:
       REGISTRY: index.docker.io
-      IMAGE_NAME: calvincsinfrastructure/devcontainer-coder
+      IMAGE_NAME: calvincsinfrastructure/devcontainer-cs300
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -276,7 +276,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Extract metadata (tags, labels) for Docker coder
+      - name: Extract metadata (tags, labels) for Docker CS300
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -284,11 +284,11 @@ jobs:
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
-      - name: Build and push Docker image coder
+      - name: Build and push Docker image CS300
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: "{{defaultContext}}:coder"
+          context: "{{defaultContext}}:cs300"
           file: Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}

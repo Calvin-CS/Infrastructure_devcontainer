@@ -9,5 +9,4 @@ docker build -t devcontainer-cs112:latest cs112/.
 docker build -t devcontainer-cs212:latest cs212/.
 docker build -t devcontainer-cs214:latest cs214/.
 docker build -t devcontainer-cs262:latest cs262/.
-docker build -t devcontainer-coder:latest coder/.
-docker build -t devcontainer-codervnc:latest codervnc/.
+docker build -t devcontainer-cs262:latest cs300/.
