@@ -2,7 +2,7 @@ FROM ubuntu:noble
 LABEL maintainer="Chris Wieringa <cwieri39@calvin.edu>"
 
 # Set versions and platforms
-ARG BUILDDATE=20240717-1
+ARG BUILDDATE=20240731-1
 ARG TZ=America/Detroit
 
 # Do all run commands with bash
@@ -59,39 +59,15 @@ RUN mkdir -p /scripts
 
 # Locale and Environment configuration
 RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV TERM xterm-256color
-ENV TZ=${TZ}
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8 \
+    TERM=xterm-256color \
+    TZ=${TZ}
 
 ##################################
 ## Calvin CS course requirements
 ##################################
-# CS10X
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS10X-packages.sh /scripts/CS10X-packages.sh
-RUN /scripts/CS10X-packages.sh
-
-# CS112
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS112-packages.sh /scripts/CS112-packages.sh
-RUN /scripts/CS112-packages.sh
-
-# CS212
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS212-packages.sh /scripts/CS212-packages.sh
-RUN /scripts/CS212-packages.sh
-
-# CS214
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS214-packages.sh /scripts/CS214-packages.sh
-RUN /scripts/CS214-packages.sh
-
-# CS262
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS262-packages.sh /scripts/CS262-packages.sh
-RUN /scripts/CS262-packages.sh
-
-# CS300
-ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/CS300-packages.sh /scripts/CS300-packages.sh
-RUN /scripts/CS300-packages.sh
-
 # DATA202
 ADD --chmod=0755 https://raw.githubusercontent.com/Calvin-CS/Infrastructure_devcontainer/main/scripts/DATA202-packages.sh /scripts/DATA202-packages.sh
 RUN /scripts/DATA202-packages.sh

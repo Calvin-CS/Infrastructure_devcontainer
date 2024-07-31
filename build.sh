@@ -10,3 +10,4 @@ docker build -t devcontainer-cs212:latest cs212/.
 docker build -t devcontainer-cs214:latest cs214/.
 docker build -t devcontainer-cs262:latest cs262/.
 docker build -t devcontainer-cs262:latest cs300/.
+docker build -t devcontainer-data202:latest data202/.
